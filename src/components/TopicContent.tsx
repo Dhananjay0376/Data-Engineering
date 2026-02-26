@@ -1,9 +1,11 @@
+import { lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, ArrowRight, BookOpen } from 'lucide-react';
 import { topics } from '../lib/data';
-import ERDiagram from './diagrams/ERDiagram';
-import DataLakeDiagram from './diagrams/DataLakeDiagram';
-import OLAPvsOLTP from './diagrams/OLAPvsOLTP';
+
+const ERDiagram = lazy(() => import('./diagrams/ERDiagram'));
+const DataLakeDiagram = lazy(() => import('./diagrams/DataLakeDiagram'));
+const OLAPvsOLTP = lazy(() => import('./diagrams/OLAPvsOLTP'));
 
 interface TopicContentProps {
   activeTopic: string;
@@ -14,6 +16,7 @@ const diagramMap: Record<string, React.ComponentType> = {
   'data-lake': DataLakeDiagram,
   'olap-vs-oltp': OLAPvsOLTP,
 };
+
 
 export default function TopicContent({ activeTopic }: TopicContentProps) {
   const topic = topics.find(t => t.id === activeTopic);
@@ -188,7 +191,9 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
                       transition={{ delay: 0.35 + index * 0.06 }}
                       className="mt-6"
                     >
-                      <DiagramComponent />
+                      <Suspense fallback={<div className="h-40 rounded-xl bg-white/5 animate-pulse" />}>
+                        <DiagramComponent />
+                      </Suspense>
                     </motion.div>
                   )}
                 </div>
