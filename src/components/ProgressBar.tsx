@@ -26,20 +26,19 @@ export default function ProgressBar({ activeTopic }: ProgressBarProps) {
           {topics.map((t, i) => (
             <div
               key={t.id}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                i === currentIndex
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentIndex
                   ? 'scale-125'
                   : i < currentIndex
-                  ? 'opacity-60'
-                  : 'opacity-20'
-              }`}
+                    ? 'opacity-60'
+                    : 'opacity-20'
+                }`}
               style={{
                 backgroundColor: i <= currentIndex ? t.color : '#ffffff'
               }}
             />
           ))}
         </div>
-        <span className="text-xs text-white/30" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+        <span className="text-xs text-white/55" style={{ fontFamily: "'DM Sans', sans-serif" }}>
           {currentIndex + 1} / {topics.length} modules
         </span>
       </div>

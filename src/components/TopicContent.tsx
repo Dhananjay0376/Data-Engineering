@@ -62,7 +62,7 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="flex items-center gap-4 text-white/35 text-sm"
+            className="flex items-center gap-4 text-white/55 text-sm"
           >
             <span className="flex items-center gap-1.5">
               <BookOpen size={14} />
@@ -118,7 +118,7 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 + index * 0.08 }}
-                    className="text-white/55 leading-[1.85] text-[15px] mb-6"
+                    className="text-white/75 leading-[1.85] text-[15px] mb-6"
                   >
                     {section.content}
                   </motion.p>
@@ -139,7 +139,7 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
                         />
                         <span
                           className="text-[11px] font-bold tracking-[0.15em] uppercase"
-                          style={{ color: `${topic.color}99` }}
+                          style={{ color: topic.color }}
                         >
                           Key Points
                         </span>
@@ -167,7 +167,7 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
                               >
                                 <CheckCircle size={12} style={{ color: topic.color }} />
                               </div>
-                              <p className="text-sm leading-relaxed text-white/50 group-hover/item:text-white/65 transition-colors">
+                              <p className="text-sm leading-relaxed text-white/70 group-hover/item:text-white/85 transition-colors">
                                 {label && (
                                   <span className="font-semibold text-white/70">{label}: </span>
                                 )}
@@ -224,7 +224,7 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
             >
               <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
               <div className="text-left">
-                <span className="text-[10px] uppercase tracking-widest block text-white/25">Previous</span>
+                <span className="text-[10px] uppercase tracking-widest block text-white/50">Previous</span>
                 <span className="font-medium">{topics[topics.indexOf(topic) - 1].title}</span>
               </div>
             </button>
@@ -248,7 +248,7 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
               }}
             >
               <div className="text-right">
-                <span className="text-[10px] uppercase tracking-widest block opacity-50">Next Module</span>
+                <span className="text-[10px] uppercase tracking-widest block opacity-70">Next Module</span>
                 <span className="font-medium">{topics[topics.indexOf(topic) + 1].title}</span>
               </div>
               <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />

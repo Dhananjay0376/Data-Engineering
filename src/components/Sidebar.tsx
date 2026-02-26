@@ -25,6 +25,7 @@ export default function Sidebar({ activeTopic, setActiveTopic }: SidebarProps) {
       {/* Mobile toggle */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
+        aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
         className="fixed top-4 left-4 z-50 lg:hidden bg-[#1a1a2e]/90 backdrop-blur-sm border border-white/10 rounded-xl p-2.5 text-white shadow-lg"
       >
         {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -56,7 +57,7 @@ export default function Sidebar({ activeTopic, setActiveTopic }: SidebarProps) {
             </div>
             <div>
               <h1 className="text-white font-bold text-lg tracking-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>Data Eng</h1>
-              <p className="text-white/40 text-xs tracking-widest uppercase">Course Guide</p>
+              <p className="text-white/60 text-xs tracking-widest uppercase">Course Guide</p>
             </div>
           </div>
         </div>
@@ -72,7 +73,7 @@ export default function Sidebar({ activeTopic, setActiveTopic }: SidebarProps) {
                 className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl text-left transition-all duration-200 group relative ${
                   isActive
                     ? 'bg-white/8 text-white'
-                    : 'text-white/50 hover:text-white/80 hover:bg-white/3'
+                    : 'text-white/65 hover:text-white/90 hover:bg-white/3'
                 }`}
                 whileHover={{ x: 2 }}
                 whileTap={{ scale: 0.98 }}
@@ -95,7 +96,7 @@ export default function Sidebar({ activeTopic, setActiveTopic }: SidebarProps) {
                   <span className="text-sm font-medium block truncate" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                     {topic.title}
                   </span>
-                  <span className="text-xs text-white/30">
+                  <span className="text-xs text-white/50">
                     {topic.sections.length} sections
                   </span>
                 </div>
