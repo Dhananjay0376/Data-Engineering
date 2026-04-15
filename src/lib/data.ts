@@ -10,6 +10,7 @@ export interface Topic {
   title: string;
   icon: string;
   color: string;
+  session: number;
   sections: Section[];
 }
 
@@ -19,6 +20,7 @@ export const topics: Topic[] = [
     title: 'Introduction to Data Engineering',
     icon: 'Database',
     color: '#FFB800',
+    session: 1,
     sections: [
       {
         title: 'What is Data Engineering?',
@@ -67,6 +69,7 @@ export const topics: Topic[] = [
     title: 'The Data Engineering Lifecycle',
     icon: 'RefreshCw',
     color: '#FF6B6B',
+    session: 1,
     sections: [
       {
         title: 'Data Generation & Collection',
@@ -128,6 +131,7 @@ export const topics: Topic[] = [
     title: 'Data Collection',
     icon: 'Download',
     color: '#00B4D8',
+    session: 1,
     sections: [
       {
         title: 'Sources of Data',
@@ -221,6 +225,7 @@ export const topics: Topic[] = [
     title: 'Data Modeling',
     icon: 'GitBranch',
     color: '#7B61FF',
+    session: 1,
     sections: [
       {
         title: 'Core Concepts of Data Modeling',
@@ -244,8 +249,8 @@ export const topics: Topic[] = [
           'Entities: Represent tables — depicted as rectangles in ER notation (e.g., Customer, Order, Product).',
           'Attributes: Properties of entities — depicted as ovals; underlined attributes are primary keys.',
           'Relationships: Associations between entities — depicted as diamonds labeled with a verb (places, contains, belongs_to).',
-          'One-to-One (1:1): Each record in Table A relates to exactly one record in Table B (Person ↔ Passport).',
-          'One-to-Many (1:N): One record in Table A relates to many records in Table B (Customer → Orders).',
+          'One-to-One (1:1): Each record in Table A relates to exactly one record in Table B (Person — Passport).',
+          'One-to-Many (1:N): One record in Table A relates to many records in Table B (Customer -> Orders).',
           'Many-to-Many (M:N): Many records in Table A relate to many in Table B; resolved via a junction/bridge table.',
           'Foreign Key (FK): A column referencing the primary key of another table, enforcing referential integrity.',
         ],
@@ -304,6 +309,7 @@ export const topics: Topic[] = [
     title: 'Data Storage',
     icon: 'HardDrive',
     color: '#00D4AA',
+    session: 1,
     sections: [
       {
         title: 'Relational Databases',
@@ -358,6 +364,7 @@ export const topics: Topic[] = [
     title: 'Data Processing & Transformation (ETL)',
     icon: 'Workflow',
     color: '#E040FB',
+    session: 1,
     sections: [
       {
         title: 'What is ETL?',
@@ -430,6 +437,194 @@ export const topics: Topic[] = [
           'Data Freshness Monitoring: Verify that tables are updated within expected time windows — detect silent pipeline failures.',
           'Anomaly Detection: Alert when row counts, null rates, or metric values deviate significantly from historical baselines.',
           'Lineage Tracking: Track data lineage — understanding which source tables flow into which downstream tables, enabling impact analysis when a source changes.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'data-cleaning',
+    title: 'Data Cleaning Techniques',
+    icon: 'Layers',
+    color: '#FF6B6B',
+    session: 2,
+    sections: [
+      {
+        title: 'Core Cleaning Principles',
+        content:
+          'Data cleaning is not a one-time task but a continuous discipline in the data engineering lifecycle. It involves the systematic detection and correction (or removal) of corrupt or inaccurate records from a record set, table, or database. This refers to identifying incomplete, incorrect, inaccurate or irrelevant parts of the data and then replacing, modifying, or deleting the coarse data. In a production environment, cleaning must be automated within pipelines to handle millions of records per minute, ensuring that downstream systems like ML models and BI dashboards receive normalized and trustworthy data.',
+        keyPoints: [
+          'Garbage In, Garbage Out (GIGO): The accuracy of analytical results is capped by the quality of the input data.',
+          'Data Profiling: The essential first step — systematically analyzing data to understand its distribution, null rates, and anomalies.',
+          'Structural Errors: Fixing naming conventions, handling typos, and resolving inconsistent capitalization (e.g., "NY" vs "New York").',
+          'Standardization: Ensuring all units of measure, currencies, and date formats (ISO 8601) are consistent across the dataset.',
+        ],
+      },
+      {
+        title: 'Handling Missing & Incomplete Data',
+        content:
+          'Missing data is an inevitability in real-world systems, caused by everything from sensor failure to user skipping a form field. Data engineers must decide on a strategy for each field: Deletion (removing the row), Imputation (filling with a mean, median, or predicted value), or Flagging (using a placeholder like -1 or "Unknown"). Each choice has trade-offs — deletion can introduce bias, while imputation can distort statistical distributions. Advanced pipelines use ML-driven imputation to fill gaps based on surrounding context.',
+        keyPoints: [
+          'Listwise Deletion: Removing an entire record if any required field is missing — simple but reduces sample size.',
+          'Mean/Median Imputation: Filling numerical gaps with central values — fast but reduces variance.',
+          'K-Nearest Neighbors (KNN): Predicting missing values based on similar records in the dataset.',
+          'Multiple Imputation: Using statistical models to create several plausible datasets and averaging the results.',
+        ],
+      },
+      {
+        title: 'Batch vs. Stream Processing (Advanced Comparison)',
+        content:
+          'Choosing between batch and stream processing is a fundamental architectural decision that impacts how cleaning is implemented. Batch processing (e.g., via Spark) handles large volumes of historical data, allowing for complex "global" cleaning tasks like cross-table deduplication. Stream processing (e.g., via Flink or Kafka Streams) handles data minute-by-minute, enabling real-time cleaning but requiring state management to handle out-of-order events or session-based cleaning. Modern architectures often leverage both to balance low-latency insights with high-accuracy historical records.',
+        keyPoints: [
+          'State Management: Essential for streaming — keeping track of seen events to detect duplicates in real-time.',
+          'Watermarking: A streaming technique to handle data that arrives late, ensuring cleaning logic waits long enough for late records.',
+          'Cost Efficiency: Batch is typically cheaper per gigabyte; Streaming costs more in compute but provides higher business value in real-time.',
+          'Unified Processing: Using frameworks like Apache Beam to write cleaning code once and run it in both batch and stream modes.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'data-integration',
+    title: 'Data Integration',
+    icon: 'GitMerge',
+    color: '#FFB800',
+    session: 2,
+    sections: [
+      {
+        title: 'Combining Data from Multiple Sources',
+        content:
+          'Data integration is the process of combining data residing in different sources and providing users with a unified view of them. This process becomes significant in a variety of situations, including both commercial (when two similar companies need to merge their databases) and scientific (combining research results from different repositories) domains. Engineers must navigate the "Schema Matching" problem — determining that `cust_id` in system A is the same as `User_Account_Number` in system B — to create a cohesive Single Source of Truth.',
+        keyPoints: [
+          'Schema Mapping: Creating the translation layer between source fields and a unified target schema.',
+          'Entity Resolution: Using fuzzy matching and deterministic rules to identify the same individual across multiple systems.',
+          'Data Fusion: Resolving conflicts when two sources provide different values for the same attribute (e.g., which address is more fresh?).',
+          'Virtual Integration (Federation): Accessing data in real-time from sources without physically moving it to a central lake.',
+        ],
+      },
+      {
+        title: 'Modern Data Integration Tools',
+        content:
+          'The integration landscape has evolved from custom-coded scripts to sophisticated SaaS platforms. Low-code ingestion tools like Fivetran and Airbyte offer managed connectors that handle the heavy lifting of API paging and error handling. For complex, high-scale transformations, dbt (Data Build Tool) has become the industry standard, allowing engineers to define integration logic using SQL while maintaining version control and testing. Choosing the right tool depends on data volume, team expertise, and the required frequency of updates.',
+        keyPoints: [
+          'Managed Connectors: Automatically adapt to changes in upstream APIs (e.g., Salesforce or Stripe updates).',
+          'Open-Source (Airbyte/Meltano): Provides flexibility to build custom integrations while leveraging community connectors.',
+          'Reverse ETL (Census/Hightouch): The emerging practice of moving integrated data from the warehouse back into operational tools.',
+          'Change Data Capture (CDC): Using transaction logs (PostgreSQL binlog) to capture changes in real-time for integration.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'data-quality',
+    title: 'Data Quality & Consistency',
+    icon: 'CheckCircle2',
+    color: '#00D4AA',
+    session: 2,
+    sections: [
+      {
+        title: 'Defining Data Quality Standards',
+        content:
+          'Data quality is not a subjective "feeling" but a measurable set of metrics. To maintain high-quality data, engineers implement automated checks against five key dimensions: Accuracy (correctness), Completeness (no missing gaps), Consistency (matches across systems), Validity (follows business rules), and Timeliness (data is fresh enough). High-quality data is the lifeblood of an organization; without it, trust in analytics collapses, leading to costly business errors.',
+        keyPoints: [
+          'The 5 Dimensions: Accuracy, Completeness, Consistency, Validity, and Timeliness.',
+          'Data SLAs: Formal Service Level Agreements defining the minimum quality standards for a dataset.',
+          'Automated Assertions: Running tests inside the pipeline to immediately catch and quarantine "bad" data.',
+          'Data Observability: Using tools like Monte Carlo or Great Expectations to monitor quality trends over time.',
+        ],
+      },
+      {
+        title: 'Ensuring Data Consistency',
+        content:
+          'Consistency ensures that the same piece of information, when stored in multiple places, is identical. In distributed data architectures, consistency is difficult to maintain due to the CAP theorem (Consistency vs. Availability). Data engineers use techniques like Distributed Transactions or Idempotent Pipelines to ensure that data remains consistent even during system failures. Maintaining a shared "Master Data" repository helps synchronize core entities across all business units.',
+        keyPoints: [
+          'Idempotency: Ensuring that if a pipeline task runs twice, it produces the same consistent output.',
+          'Distributed Locks: Preventing multiple processes from modifying the same record simultaneously.',
+          'Reconciliation Pipelines: Periodic jobs that "crawl" different systems to find and fix inconsistencies.',
+          'Referential Integrity: Ensuring that relationships between tables (e.g., Orders to Customers) are never broken.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'data-pipelines',
+    title: 'Data Pipelines',
+    icon: 'Activity',
+    color: '#00B4D8',
+    session: 2,
+    sections: [
+      {
+        title: 'Designing and Implementing Data Pipelines',
+        content:
+          'A data pipeline is a set of data processing elements connected in series, where the output of one element is the input of the next. Designing a production-ready pipeline requires more than just moving data; it requires build-in fault tolerance, scalability, and modularity. Engineers use the MEDALLION architecture (Bronze, Silver, Gold layers) to organize data as it moves from raw ingestion to analytics-ready tables, ensuring that logic is separated and easy to maintain.',
+        keyPoints: [
+          'Medallion Architecture: Bronze (Raw), Silver (Filtered/Cleaned), and Gold (Aggregated/Business-ready).',
+          'Modularity: Breaking pipelines into small, independent "Micro-services" that are easy to test and replace.',
+          'Fault Tolerance: Building pipelines that can recover from network partitions or database outages without data loss.',
+          'Scalability: Using distributed frameworks (Spark/Flink) to handle a 10x increase in data without code changes.',
+        ],
+      },
+      {
+        title: 'Workflow Orchestration with Apache Airflow',
+        content:
+          'Workflow orchestration is the "Conductor" of the data warehouse. Apache Airflow allows engineers to define complex, dependency-aware workflows as Directed Acyclic Graphs (DAGs) in Python. It handles the scheduling, triggers retries on failure, and provide a rich UI to monitor the health of every task. Airflow prevents the "Spaghetti Code" of cron jobs by centralizing all logic into a single, version-controlled platform.',
+        keyPoints: [
+          'DAGs (Directed Acyclic Graphs): Visual representation of the order and dependencies of your data tasks.',
+          'Operators: Pre-built templates for running SQL, Python, or calling external APIs (e.g., Slack notifications).',
+          'Dynamic Task Generation: Writing code that automatically creates tasks based on the number of files in a folder.',
+          'Backfilling: The ability to easily re-run months of historical data after a logic change or bug fix.',
+        ],
+      },
+      {
+        title: 'Monitoring and Maintenance',
+        content:
+          'A pipeline is never "finished." Monitoring is essential to catch silent failures, such as a pipeline that runs successfully but produces zero rows. Observability involves tracking "Data Drift" (when input patterns change unexpectedly) and "Metric Drift." Maintenance includes regular performance tuning, updating API versions, and refactoring code as business requirements evolve. Successful data teams prioritize "Data Ops" — applying DevOps principles like CI/CD to data pipelines.',
+        keyPoints: [
+          'Alerting: Immediate notifications (Slack/PagerDuty) when a critical task fails or an SLA is missed.',
+          'Data Freshness: A dashboard showing how old the data is in each analytics table.',
+          'Resource Monitoring: Tracking memory and CPU usage of Spark jobs to optimize cloud costs.',
+          'Schema Drift: Automatically detecting when a source system adds a new column or changes a data type.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'data-security',
+    title: 'Data Security & Privacy',
+    icon: 'Shield',
+    color: '#7B61FF',
+    session: 2,
+    sections: [
+      {
+        title: 'Ensuring Data Security',
+        content:
+          'Data security is the protective measures taken to keep data safe from unauthorized access and to preserve its integrity and confidentiality. Data engineers implement security at three levels: Storage (encryption and VPCs), Compute (IAM roles and secrets management), and Access (RBAC and Row-Level Security). The goal is to ensure that even if one layer is breached, the data remains protected by multiple defensive rings.',
+        keyPoints: [
+          'VPC & Firewalls: Ensuring data infrastructure is isolated from the public internet.',
+          'IAM (Identity and Access Management): Managing granular permissions for every user and service account.',
+          'RBAC (Role-Based Access Control): Granting permissions based on job function rather than individual users.',
+          'Row-Level Security (RLS): Ensuring a user from "Region A" can only query data belonging to their region.',
+        ],
+      },
+      {
+        title: 'Data Encryption Techniques',
+        content:
+          'Encryption is the process of translating plain text data into something that appears to be random and meaningless (ciphertext). Accessing the data requires a secret key. Data engineers manage encryption "In Transit" using TLS/SSL and "At Rest" using AES-256. They also leverage Key Management Services (KMS) to automatically rotate keys and ensure that no single person has access to the raw encryption secrets.',
+        keyPoints: [
+          'TLS/SSL: Encrypting data as it travels across the network between systems.',
+          'AES-256: The industry standard for encrypting data at rest (on physical hard drives).',
+          'Hashing: One-way encryption for protecting passwords and verifying data integrity.',
+          'Key Rotation: The security practice of regularly changing encryption keys to limit the impact of a potential compromise.',
+        ],
+      },
+      {
+        title: 'Compliance with Data Privacy Regulations',
+        content:
+          'Privacy regulations like GDPR, CCPA, and HIPAA are no longer optional. Data engineers must build "Compliance-by-Design" into their pipelines. This includes implementing data lineage (knowing where data came from), privacy-safe deletion (The Right to be Forgotten), and personal data discovery (identifying PII like emails or SSNs). Failure to comply can lead to fines totaling 4% of global revenue and permanent brand damage.',
+        keyPoints: [
+          'GDPR & CCPA: Regulations giving users control over their data and requiring transparent usage policies.',
+          'PII Masking: Automatically hiding sensitive data from non-privileged users in the data warehouse.',
+          'Data Residency: Ensuring data for specific users stays physically within their geographic borders (e.g., EU data stays in the EU).',
+          'Data Lineage: Maintain an audit trail showing exactly how data was transformed from source to dashboard.',
         ],
       },
     ],

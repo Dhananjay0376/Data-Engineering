@@ -23,3 +23,13 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+.agent/
+.agents/
+.gemini/
+.gsd/
+adapters/
+docs/
+scripts/
+GSD-STYLE.md
+model_capabilities.yaml
+PROJECT_RULES.md
