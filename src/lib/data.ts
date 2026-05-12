@@ -1,8 +1,15 @@
+export interface PracticeQuestion {
+  question: string;
+  shortAnswer: string;
+  detailedAnswer: string;
+}
+
 export interface Section {
   title: string;
   content: string;
   keyPoints?: string[];
   diagram?: string;
+  practiceQuestions?: PracticeQuestion[];
 }
 
 export interface Topic {
@@ -12,6 +19,7 @@ export interface Topic {
   color: string;
   session: number;
   sections: Section[];
+  masteryQuestion?: PracticeQuestion;
 }
 
 export const topics: Topic[] = [
@@ -63,6 +71,11 @@ export const topics: Topic[] = [
         ],
       },
     ],
+    masteryQuestion: {
+      question: "Summarize the essence of Data Engineering and its foundational role in the modern digital economy.",
+      shortAnswer: "Data Engineering is the 'plumbing' of the digital economy, transforming raw information into clean, reliable datasets. It ensures that data flows at scale and with high reliability, preventing 'Garbage In, Garbage Out' and enabling all downstream AI and analytics.",
+      detailedAnswer: "Data Engineering is the vital discipline of building and maintaining the invisible 'Data Highways' that power the modern world. At its core, it is the process of transforming raw, chaotic information into clean, structured datasets that organizations can trust. Without the work of data engineers, even the most advanced machine learning models or business dashboards would be fed by unreliable, fragmented data—leading to the **Garbage In, Garbage Out (GIGO)** failure. Engineers act as both architects and plumbers, ensuring that data flows with high **Reliability**, low **Latency**, and at massive **Scale**. By automating the 80% of data work that is typically manual wrangling, they enable analysts and data scientists to focus on innovation. Ultimately, data engineering turns the 'crude oil' of raw data into a refined asset, creating a **Single Source of Truth** that drives competitive advantage, operational efficiency, and informed decision-making across every industry from finance to healthcare."
+    }
   },
   {
     id: 'de-lifecycle',
@@ -440,6 +453,11 @@ export const topics: Topic[] = [
         ],
       },
     ],
+    masteryQuestion: {
+      question: "Provide a detailed walkthrough of the Data Engineering Lifecycle, highlighting the transition from collection to consumption.",
+      shortAnswer: "The lifecycle transitions from Data Generation and Ingestion to Storage and Transformation, finally reaching Consumption. This flow is managed by Orchestration and protected by Governance to ensure data is secure, reliable, and actionable.",
+      detailedAnswer: "The Data Engineering Lifecycle is a continuous journey that begins at the point of **Data Generation**, where raw events are born from users, IoT sensors, or transactional systems. Engineers must reliably capture this data through **Ingestion**, choosing between **Batch** loads for historical volume or **Streaming** for real-time velocity. Once captured, data is moved into **Storage**, where architectures like **Data Lakes** and **Data Warehouses** balance cost with query performance. The heart of the lifecycle is **Transformation**, where raw data is cleaned, modeled, and enriched to become business-ready. This entire flow is protected by **Data Governance**—ensuring security, privacy, and lineage—and managed via **Orchestration**, which automates task dependencies and handles failures. Finally, the lifecycle culminates in **Data Consumption**, where the 'refined' data is served to analysts, machine learning models, or external applications, transforming technical infrastructure into measurable business value."
+    }
   },
   {
     id: 'data-cleaning',
@@ -458,6 +476,13 @@ export const topics: Topic[] = [
           'Structural Cleaning: This involves fixing "surface" issues like inconsistent capitalization (e.g., "NY" vs "New York") or removing invisible trailing spaces that break database searches.',
           'Standardization: Making sure everyone "speaks the same language"—for example, converting all dates to a single format (like ISO 8601) and all currencies to a single base.',
         ],
+        practiceQuestions: [
+          {
+            question: "Explain the concept of 'Garbage In, Garbage Out' and how a data engineer addresses it.",
+            shortAnswer: "Data cleaning prevents 'Garbage In, Garbage Out' (GIGO) by fixing structural errors (typos/case issues) and standardizing data formats (like ISO dates). It ensures analysis is based on accurate, uniform data.",
+            detailedAnswer: "The fundamental rule of data engineering is **Garbage In, Garbage Out (GIGO)**: no matter how advanced your AI is, it cannot produce truth from lies. Data engineers act as 'filtration experts' through a two-step process. First, **Structural Cleaning** fixes 'surface' defects—removing trailing spaces, correcting case sensitivity (e.g., 'Apple' vs 'apple'), and handling inconsistent naming conventions. Second, **Standardization** aligns all data points to a 'Global Language,' such as converting all timestamps to ISO 8601 or normalizing currency. This ensures that when data reaches the analysis stage, it is not just clean, but also perfectly interoperable across different systems."
+          }
+        ],
       },
       {
         title: 'Dealing with the "Gaps": Missing Data',
@@ -468,6 +493,13 @@ export const topics: Topic[] = [
           'Mean/Median Imputation: Filling gaps with the average value—quick and easy, but it can make your data look more "average" than it really is.',
           'Predictive Imputation: Using AI to guess the missing value based on other things we know about that record (like guessing age based on job title).',
           'MCAR vs MNAR: Understanding if data is missing "at random" or for a specific reason (e.g., wealthy people being less likely to report their income).',
+        ],
+        practiceQuestions: [
+          {
+            question: "What are the strategies for handling missing data, and what are their trade-offs?",
+            shortAnswer: "Missing data is handled via Deletion (removing rows), Imputation (filling with averages/predictions), or Flagging. The choice depends on whether data is missing at random (MCAR) or due to a specific bias (MNAR).",
+            detailedAnswer: "Handling gaps in data is a balancing act between volume and bias. **Listwise Deletion** is the simplest method, removing any record with missing values, but it risks losing valuable information if the dataset is small. **Mean/Median Imputation** fills gaps with averages to maintain dataset size, though it can artificially reduce variance. For complex scenarios, **Predictive Imputation** uses machine learning to 'guess' values based on other features. Crucially, an engineer must distinguish between **MCAR (Missing Completely at Random)** and **MNAR (Missing Not at Random)**—the latter requires careful handling to avoid building models that reflect hidden societal or system biases."
+          }
         ],
       },
       {
@@ -480,8 +512,20 @@ export const topics: Topic[] = [
           'Watermarking: A technique that tells the cleaner how long to wait for "late-arriving" data before finishing the job.',
           'Stateless vs Stateful: Simple cleaning (like fixing a typo) is "stateless," but complex cleaning (like checking if a user has already sent this message) requires "state" or memory.',
         ],
+        practiceQuestions: [
+          {
+            question: "Compare batch and stream cleaning techniques.",
+            shortAnswer: "Batch cleaning allows for global deduplication over large histories, while stream cleaning focuses on low-latency 'as-you-go' checks using Watermarking to manage late data.",
+            detailedAnswer: "Cleaning data at scale requires choosing between the 'Big Picture' and 'Real-Time Speed.' **Batch Cleaning** operates on historical blocks, allowing for **Global Deduplication** where every new record is checked against the entire historical database. In contrast, **Stream Cleaning** is 'cleaning as you go,' essential for real-time fraud detection. Because we lack the full history in a stream, we use **Windowed Deduplication** (checking the last 10-60 minutes) and **Watermarking** to gracefully handle data that arrives late. This ensures we maintain a balance between **Stateful** complexity (memory-heavy checks) and the low **Latency** required for instant reactions."
+          }
+        ],
       },
     ],
+    masteryQuestion: {
+      question: "Provide a comprehensive overview of the data cleaning lifecycle, from initial ingestion to large-scale streaming processing.",
+      shortAnswer: "Data cleaning prevents 'Garbage In, Garbage Out' (GIGO) by fixing structural errors (formatting/typos) and standardizing data formats (like ISO dates). It involves handling missing data via Deletion or Imputation and scales using Batch or Stream processing with Watermarking.",
+      detailedAnswer: "Data cleaning is the critical process of transforming raw, 'dirty' data into a reliable asset, guided by the **Garbage In, Garbage Out (GIGO)** principle. The journey begins with identifying the origin of 'dirt'—such as human typos or system glitches—and applying **Structural Cleaning** to fix surface defects like inconsistent capitalization or trailing spaces. Simultaneously, **Standardization** ensures all records follow a global schema, like **ISO 8601** dates. When gaps appear, engineers must strategically handle missing values through **Deletion**, **Imputation**, or **Flagging**, while carefully distinguishing between **MCAR** and **MNAR** to avoid bias. At a modern scale, this is managed either via **Batch Cleaning** for historical deduplication or **Stream Cleaning** for real-time needs. In streams, techniques like **Watermarking** allow the system to handle late-arriving data while maintaining low **Latency**. By mastering these stages, an engineer ensures that the data 'filtration system' remains resilient, providing a high-quality foundation for all downstream analysis."
+    }
   },
   {
     id: 'data-integration',
@@ -500,6 +544,13 @@ export const topics: Topic[] = [
           'Data Fusion: Deciding which system to trust when they disagree (e.g., if one says the customer moved and the other says they didn’t).',
           'Virtual Integration: Connecting to sources in real-time without actually moving the data—like a "live window" into another database.',
         ],
+        practiceQuestions: [
+          {
+            question: "What is Data Integration and how does it solve the 'Single Source of Truth' challenge?",
+            shortAnswer: "Data integration creates a 'Single Source of Truth' by using Schema Mapping to align different field names and Entity Resolution to merge duplicate records belonging to the same real-world object.",
+            detailedAnswer: "Data Integration is the process of building bridges between isolated 'Data Silos.' The biggest challenge is the 'Tower of Babel' problem, where different systems use different names for the same thing. Engineers solve this using **Schema Mapping**, which creates a translation layer (e.g., mapping `uid` in System A to `user_id` in System B). Once fields are aligned, **Entity Resolution** uses fuzzy logic to determine if 'John D. Smith' and 'J. Smith' at the same address are the same person. By performing **Data Fusion**, we resolve conflicting information to establish a **Single Source of Truth**, ensuring that the entire company bases its decisions on one consistent story."
+          }
+        ],
       },
       {
         title: 'From Scripts to Platforms',
@@ -511,8 +562,20 @@ export const topics: Topic[] = [
           'CDC (Change Data Capture): Watching a database’s "diary" (transaction logs) to see exactly when data changes and instantly syncing it.',
           'API Polling vs Webhooks: The difference between "calling to check for updates" every hour versus "waiting for the system to call you" when something happens.',
         ],
+        practiceQuestions: [
+          {
+            question: "How has the approach to data integration evolved from custom scripts to modern platforms?",
+            shortAnswer: "Modern integration uses Managed Connectors for reliability, Change Data Capture (CDC) for instant syncing via database logs, and Reverse ETL to send insights back to business tools like Salesforce.",
+            detailedAnswer: "Integration has evolved from fragile, hard-coded scripts to resilient, automated platforms. Modern pipelines rely on **Managed Connectors** (like Fivetran or Airbyte) which act as universal adapters, handling API rate limits and schema changes automatically. For high-speed syncing, we use **Change Data Capture (CDC)**, which watches a database's 'diary' (transaction logs) to capture updates the millisecond they happen. Finally, we use **Reverse ETL** to complete the circle—taking the cleaned, integrated insights from our data warehouse and pushing them back into operational tools like Salesforce or Zendesk, turning passive data into active business value."
+          }
+        ],
       },
     ],
+    masteryQuestion: {
+      question: "Discuss the evolution and technical challenges of data integration in modern enterprises.",
+      shortAnswer: "Data integration creates a 'Single Source of Truth' using Schema Mapping and Entity Resolution. It has evolved from brittle custom scripts to managed platforms using Change Data Capture (CDC) for real-time syncing and Reverse ETL for operational value.",
+      detailedAnswer: "Data Integration is the engineering discipline of unifying fragmented data 'silos' into a **Single Source of Truth**. The primary challenge is the 'Tower of Babel' problem, where disparate systems use conflicting terminology. Engineers resolve this through **Schema Mapping**, which aligns field names across sources, and **Entity Resolution**, which identifies if two different records represent the same real-world person or object. This process culminates in **Data Fusion**, where conflicting values are resolved to create a consistent narrative. Historically, this required brittle custom scripts, but the field has evolved into using **Managed Connectors** that act as universal adapters. High-velocity systems now utilize **Change Data Capture (CDC)** to mirror database transaction logs in real-time, ensuring zero-latency synchronization. Finally, the modern lifecycle is completed by **Reverse ETL**, which pushes these integrated insights back into operational business tools like Salesforce, transforming the data warehouse from a passive storage unit into an active engine for business growth."
+    }
   },
   {
     id: 'data-quality',
@@ -532,6 +595,13 @@ export const topics: Topic[] = [
           'Timeliness: Is the data fresh enough to be useful? (e.g., A report on yesterday’s sales is useful; a report on sales from 3 years ago might not be.)',
           'Data Observability: Not just checking for errors, but watching your data like a heart monitor to spot problems before they cause a "cardiac arrest" in your systems.',
         ],
+        practiceQuestions: [
+          {
+            question: "What are the dimensions of Data Quality and how can they be monitored?",
+            shortAnswer: "Data quality is measured through Accuracy, Completeness, Validity, and Timeliness. Data Observability acts as a 'heart monitor' to alert engineers before failures become systemic.",
+            detailedAnswer: "Trust in a data system is built on four pillars of quality. **Accuracy** ensures the data reflects reality (is the inventory count correct?), **Completeness** checks for missing pieces, **Validity** ensures data follows technical rules (is the email format valid?), and **Timeliness** ensures the data is fresh enough to be useful. To manage this at scale, we use **Data Observability**—an automated 'health monitor' that tracks these metrics in real-time. By setting up alerts for 'anomalous behavior,' engineers can catch and fix a 'silent failure' in a pipeline before it corrupts a monthly financial report or a critical business dashboard."
+          }
+        ],
       },
       {
         title: 'The Consistency Challenge',
@@ -543,8 +613,20 @@ export const topics: Topic[] = [
           'Idempotency: The property of a system where running the same update twice doesn’t create a mess (like accidentally charging a customer twice).',
           'Reconciliation: A regular "check-up" where you compare two systems to find and fix any differences between them.',
         ],
+        practiceQuestions: [
+          {
+            question: "How do engineers ensure data consistency across distributed systems?",
+            shortAnswer: "Consistency is maintained through Master Data Management (MDM) for 'gold records' and Idempotency, which ensures that re-running a process doesn't create duplicate errors.",
+            detailedAnswer: "In distributed systems, keeping data consistent is a massive engineering challenge. We solve this using **Master Data Management (MDM)**, creating a 'Gold Record' that acts as the final referee when different systems disagree. At the code level, engineers must design for **Idempotency**—ensuring that if a pipeline task (like a payment processing step) is run twice due to a network glitch, it only ever has the effect of running once. This, combined with regular **Reconciliation** checks between source and destination, ensures that the user's bank balance is the same whether they check it on their phone, at an ATM, or on their laptop."
+          }
+        ],
       },
     ],
+    masteryQuestion: {
+      question: "How does a data engineer build and maintain a 'Trustworthy' data environment across distributed systems?",
+      shortAnswer: "Building trust requires focusing on Accuracy, Completeness, Validity, and Timeliness, monitored via Data Observability. Consistency is maintained using Master Data Management (MDM) for 'Gold Records' and designing for Idempotency.",
+      detailedAnswer: "Building trust in data requires a rigorous focus on the four pillars of quality: **Accuracy**, **Completeness**, **Validity**, and **Timeliness**. To manage these at scale, engineers implement **Data Observability**, an automated 'health monitor' that tracks these metrics in real-time and alerts the team before failures become systemic. Beyond individual record quality, **Consistency** across distributed systems is maintained through **Master Data Management (MDM)**, which establishes a 'Gold Record' as the final authority. At the pipeline level, the design must prioritize **Idempotency**, ensuring that a process can be re-run indefinitely without creating duplicate errors or corrupted states. This is further reinforced by regular **Reconciliation** tasks that audit the source and destination for discrepancies. By combining these proactive monitoring tools with resilient architectural patterns, engineers create a self-healing environment where data remains a 'Single Source of Truth' for all stakeholders."
+    }
   },
   {
     id: 'data-pipelines',
@@ -563,6 +645,13 @@ export const topics: Topic[] = [
           'Silver (Cleaned): This is the "Organized Shelf"—the data has been cleaned, filtered, and joined with other sources so it’s easy to use.',
           'Gold (Aggregated): This is the "Dinner Table"—the data is summarized and perfectly formatted for a specific business report or dashboard.',
         ],
+        practiceQuestions: [
+          {
+            question: "Describe the Medallion Architecture and its stages.",
+            shortAnswer: "The Medallion Architecture organizes pipelines into Bronze (raw), Silver (cleaned), and Gold (summarized) stages, ensuring data is gradually refined and monitored for Data Drift.",
+            detailedAnswer: "A modern data pipeline is best visualized as a 'Medallion Architecture' that progressively refines data. The **Bronze Stage** is the 'Raw Archive,' storing data exactly as it arrived to allow for future re-processing. The **Silver Stage** is the 'Cleaning Hub,' where data is deduplicated, filtered, and joined. Finally, the **Gold Stage** is the 'Knowledge Layer,' where data is summarized and perfectly formatted for specific business users. Throughout this highway, we monitor for **Data Drift**—subtle changes in the input data (like a sensor losing calibration) that can 'clog' the highway and lead to inaccurate reports if not caught immediately."
+          }
+        ],
       },
       {
         title: 'The Conductor: Apache Airflow',
@@ -573,6 +662,13 @@ export const topics: Topic[] = [
           'Operators: Pre-built tools that tell Airflow how to talk to a database, run a Python script, or send a message to Slack.',
           'Backfilling: The ability to say "I fixed a bug in my code, now go back and re-run every day from the last six months to fix the old data."',
           'SLA (Service Level Agreement): A promise that "this data will be ready by 8 AM every morning"—Airflow alerts you if it’s running late.',
+        ],
+        practiceQuestions: [
+          {
+            question: "What is the role of an Orchestrator in data engineering?",
+            shortAnswer: "Orchestrators like Airflow manage task dependencies using DAGs, handling Retries on failure and Backfilling old data to ensure the entire system runs on a reliable schedule.",
+            detailedAnswer: "An Orchestrator like Apache Airflow is the 'Conductor' of the data symphony. It manages complex workflows using a **DAG (Directed Acyclic Graph)**—a non-circular flowchart that defines the exact order tasks must run in. Airflow doesn't move the data itself; instead, it uses **Operators** to trigger other tools. Its true power lies in its resilience: it automatically handles **Retries** if a server goes down, manages **SLA Alerts** if a task is taking too long, and allows for **Backfilling**—the ability to re-run old tasks across months of history if a bug is discovered. This ensures the data highway remains open and predictable 24/7."
+          }
         ],
       },
       {
@@ -587,6 +683,11 @@ export const topics: Topic[] = [
         ],
       },
     ],
+    masteryQuestion: {
+      question: "Describe the modern architecture of a data highway and the role of orchestration in its management.",
+      shortAnswer: "Modern highways use the Medallion Architecture (Bronze, Silver, Gold stages). Orchestrators like Airflow manage this using DAGs, handling Retries, SLA Monitoring, and Backfilling to ensure reliability and handle Data Drift.",
+      detailedAnswer: "Modern data engineering relies on a robust 'Data Highway' architecture, typically organized using the **Medallion Architecture**. This framework progressively refines data through three distinct zones: **Bronze** for raw ingestion, **Silver** for cleaned and filtered datasets, and **Gold** for business-ready aggregations. To keep this highway running smoothly, an **Orchestrator** like Apache Airflow is employed as the central 'Conductor.' The Orchestrator defines task dependencies through a **DAG (Directed Acyclic Graph)**, ensuring that data moves in a logical, non-circular sequence. It manages the complexity of the pipeline by handling **Retries** on failure, monitoring for **SLA** breaches, and enabling **Backfilling** to correct historical data errors. Furthermore, engineers monitor for **Data Drift**, identifying subtle changes in input patterns that could degrade pipeline performance. This combination of tiered storage and intelligent orchestration ensures that data flows reliably from source to destination with maximum transparency and resilience."
+    }
   },
   {
     id: 'data-security',
@@ -605,6 +706,13 @@ export const topics: Topic[] = [
           'VPC (Virtual Private Cloud): Building your castle on a private island that isn’t connected to the public internet.',
           'Row-Level Security: Even if you’re allowed into the "Library," you can only read the books on the shelf that belong to your department.',
         ],
+        practiceQuestions: [
+          {
+            question: "Explain the 'Defense in Depth' strategy for data security.",
+            shortAnswer: "Data security uses a 'Defense in Depth' approach, combining Firewalls (moats), IAM/RBAC (keys and roles), and VPCs (private islands) to ensure no single point of failure can compromise data.",
+            detailedAnswer: "Data security is built on the principle of **Defense in Depth**, which assumes that any single security measure will eventually fail. We build a 'Castle' with multiple layers of defense. First, **Firewalls** act as the moat, blocking unauthorized traffic. Inside, **IAM (Identity & Access Management)** and **RBAC (Role-Based Access Control)** ensure that every person (or computer) only has the 'keys' they absolutely need for their specific job. For our most sensitive systems, we use a **VPC (Virtual Private Cloud)** to isolate the database on a 'private island' that isn't even connected to the public internet. This layered approach ensures that even if a hacker breaches one wall, the 'crown jewels' of the data remain safely locked away."
+          }
+        ],
       },
       {
         title: 'The Secret Decoder Ring: Encryption',
@@ -615,6 +723,13 @@ export const topics: Topic[] = [
           'AES-256: The world’s strongest digital safe—it’s the standard used to protect data sitting on physical hard drives.',
           'Hashing: A "one-way" secret code. We use this to store passwords so that even if a database is stolen, the hackers can’t see the actual passwords.',
           'Key Management: The most important rule of encryption is "don’t lose the keys." We use automated services to rotate and protect these keys.',
+        ],
+        practiceQuestions: [
+          {
+            question: "How is encryption used to protect data at different stages?",
+            shortAnswer: "Encryption protects data In Transit and At Rest. Hashing is used for one-way password protection, and Key Management ensures the 'decoder rings' are rotated and secured.",
+            detailedAnswer: "Encryption is the 'Secret Decoder Ring' that makes data unreadable to anyone without the key. We protect data in two states: **In Transit** (as it travels through 'Armored Trucks' over the web using TLS) and **At Rest** (as it sits in a 'Digital Safe' on a hard drive using AES-256). For extremely sensitive data like passwords, we use **Hashing**, which turns the text into a one-way code that can never be reversed. The most critical part of this system is **Key Management**—if you lose the keys, you lose the data; if the keys are stolen, the encryption is useless. Modern systems use dedicated services to automatically rotate and shield these keys from human eyes."
+          }
         ],
       },
       {
@@ -627,7 +742,19 @@ export const topics: Topic[] = [
           'Data Residency: Some laws require that a citizen’s data must stay physically inside their country (e.g., German data must stay in Germany).',
           'Consent Management: Ensuring you only collect data that the user has explicitly given you permission to use.',
         ],
+        practiceQuestions: [
+          {
+            question: "How does data engineering support privacy regulations like GDPR?",
+            shortAnswer: "Privacy compliance involves identifying PII, using Data Masking to protect identities, and building systems that support the Right to be Forgotten and Data Residency laws.",
+            detailedAnswer: "In the modern era, data engineers are the guardians of user privacy. This begins with identifying **PII (Personally Identifiable Information)** and applying **Data Masking** (e.g., showing only the last 4 digits of a card) so that analysts can work without seeing private details. To comply with laws like GDPR, we must implement the **Right to be Forgotten**, building automated 'cleaning' tasks that can wipe a specific user's entire history upon request. Furthermore, we manage **Data Residency**, ensuring that data physically stays within the geographic borders required by law (like keeping German citizen data on servers in Frankfurt). This ethical engineering ensures we respect the digital human rights of every user."
+          }
+        ],
       },
     ],
+    masteryQuestion: {
+      question: "Explain the multi-layered approach to protecting data assets and ensuring legal compliance in a modern data platform.",
+      shortAnswer: "Security uses 'Defense in Depth' (Firewalls, VPCs, RBAC) and Encryption (Transit/Rest). Compliance involves protecting PII via Data Masking and supporting GDPR rights like the 'Right to be Forgotten' and Data Residency.",
+      detailedAnswer: "Data protection is built on the **Defense in Depth** strategy, which implements overlapping security layers to eliminate single points of failure. This begins with infrastructure security, using **Firewalls** and **VPCs** to isolate data on 'private islands.' Access is further restricted through **IAM** and **RBAC**, ensuring users only hold the 'keys' necessary for their roles. At the data layer, **Encryption** protects information **In Transit** (TLS) and **At Rest** (AES-256), while **Hashing** provides a one-way shield for sensitive credentials. Centralized **Key Management** ensures these 'decoder rings' are rotated and secured. Beyond security, engineers act as guardians of human rights by complying with regulations like **GDPR**. This involves identifying **PII**, utilizing **Data Masking** to preserve anonymity, and building systems that support the **Right to be Forgotten**. By managing **Data Residency** to keep info within legal borders, engineers ensure that the platform is not only a secure fortress but also a legally compliant and ethical environment."
+    }
   },
 ];

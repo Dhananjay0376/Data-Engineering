@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle, ArrowRight, BookOpen } from 'lucide-react';
+import { CheckCircle, ArrowRight, BookOpen, HelpCircle, MessageSquare } from 'lucide-react';
 import { topics } from '../lib/data';
 
 const ERDiagram = lazy(() => import('./diagrams/ERDiagram'));
@@ -183,6 +183,79 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
                     </div>
                   )}
 
+                  {/* Practice Questions */}
+                  {section.practiceQuestions && section.practiceQuestions.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 + index * 0.08 }}
+                      className="mt-10 pt-8 border-t border-white/5"
+                    >
+                      <div className="flex items-center gap-2 mb-6">
+                        <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
+                          <HelpCircle size={16} className="text-white/40" />
+                        </div>
+                        <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-white/40">
+                          Exam Prep & Practice
+                        </span>
+                      </div>
+
+                      <div className="space-y-12">
+                        {section.practiceQuestions.map((pq, pqi) => (
+                          <div key={pqi} className="group/pq">
+                            <h4 className="text-xl font-medium text-white mb-6 flex gap-3 leading-snug" style={{ fontFamily: "'Instrument Serif', serif" }}>
+                              <span className="text-white/20 italic shrink-0">Q.</span>
+                              {pq.question}
+                            </h4>
+                            
+                            <div className="space-y-4">
+                              {/* Quick Recall Box */}
+                              <div 
+                                className="rounded-xl border p-4 bg-white/[0.02] flex items-start gap-4 transition-colors hover:bg-white/[0.04]"
+                                style={{ borderColor: 'rgba(255,255,255,0.05)' }}
+                              >
+                                <div className="px-2 py-1 rounded bg-white/5 text-[9px] font-bold uppercase tracking-widest text-white/40 shrink-0">
+                                  Recall
+                                </div>
+                                <p className="text-sm text-white/45 leading-relaxed italic">
+                                  {pq.shortAnswer}
+                                </p>
+                              </div>
+
+                              {/* Master Answer Box */}
+                              <div 
+                                className="relative overflow-hidden rounded-2xl border transition-all duration-500 hover:border-white/20"
+                                style={{ 
+                                  borderColor: `${topic.color}20`,
+                                  backgroundColor: `${topic.color}05`
+                                }}
+                              >
+                                <div className="absolute top-0 left-0 w-1 h-full" style={{ backgroundColor: topic.color }} />
+                                
+                                <div className="p-6 md:p-8">
+                                  <div className="flex items-center gap-2 mb-5">
+                                    <MessageSquare size={12} style={{ color: topic.color }} className="opacity-80" />
+                                    <span className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: topic.color }}>
+                                      Detailed Master Answer
+                                    </span>
+                                  </div>
+                                  <div className="text-[14px] md:text-[15px] leading-relaxed text-white/75 italic">
+                                    {/* Splitting text to highlight bolded terms from data */}
+                                    {pq.detailedAnswer.split('**').map((part, i) => 
+                                      i % 2 === 1 ? (
+                                        <span key={i} className="text-white font-bold not-italic" style={{ color: topic.color }}>{part}</span>
+                                      ) : part
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+
                   {/* Diagram */}
                   {DiagramComponent && (
                     <motion.div
@@ -213,6 +286,66 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
             );
           })}
         </div>
+
+        {/* Module Mastery Section */}
+        {topic.masteryQuestion && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="mt-20 p-8 md:p-12 rounded-[2rem] border relative overflow-hidden group"
+            style={{ 
+              borderColor: `${topic.color}25`,
+              background: `linear-gradient(145deg, ${topic.color}08 0%, rgba(0,0,0,0) 100%)`
+            }}
+          >
+            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity pointer-events-none">
+               <HelpCircle size={120} style={{ color: topic.color }} />
+            </div>
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: `${topic.color}20` }}>
+                  <HelpCircle size={20} style={{ color: topic.color }} />
+                </div>
+                <span className="text-[12px] font-black tracking-[0.3em] uppercase" style={{ color: topic.color }}>
+                  Ultimate Module Mastery
+                </span>
+              </div>
+
+              <h3 className="text-3xl md:text-4xl font-bold text-white mb-8 leading-tight max-w-2xl" style={{ fontFamily: "'Instrument Serif', serif" }}>
+                {topic.masteryQuestion.question}
+              </h3>
+
+              <div className="space-y-6">
+                <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/5">
+                   <div className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">Concise Recall</div>
+                   <p className="text-white/50 text-[15px] italic leading-relaxed">
+                     {topic.masteryQuestion.shortAnswer}
+                   </p>
+                </div>
+
+                <div className="p-8 md:p-10 rounded-[2rem] bg-white/[0.02] border border-white/10 relative overflow-hidden shadow-2xl">
+                   <div className="absolute top-0 left-0 w-2 h-full" style={{ backgroundColor: topic.color }} />
+                   <div className="flex items-center gap-3 mb-6">
+                     <div className="px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest" style={{ backgroundColor: `${topic.color}20`, color: topic.color }}>
+                       Master Answer (Exam Ready)
+                     </div>
+                     <span className="text-white/20 text-[10px] font-medium tracking-widest uppercase">Synthesis Report</span>
+                   </div>
+                   <div className="text-[15px] md:text-[16px] leading-[1.8] text-white/80 font-medium italic">
+                      {topic.masteryQuestion.detailedAnswer.split('**').map((part, i) => 
+                        i % 2 === 1 ? (
+                          <span key={i} className="text-white font-bold not-italic underline decoration-2 underline-offset-4" style={{ textDecorationColor: `${topic.color}40` }}>{part}</span>
+                        ) : part
+                      )}
+                   </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Module Navigation */}
         <div className="mt-16 pt-8 border-t border-white/5 flex justify-between items-center">
