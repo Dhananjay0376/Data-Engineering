@@ -21,7 +21,55 @@ const diagramMap: Record<string, React.ComponentType> = {
 export default function TopicContent({ activeTopic }: TopicContentProps) {
   const topic = topics.find(t => t.id === activeTopic);
 
-  if (!topic) return null;
+  if (!topic) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] text-center max-w-2xl mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-[#00D4AA] to-[#7B61FF] flex items-center justify-center mb-10 shadow-2xl shadow-[#00D4AA]/20"
+        >
+          <BookOpen size={32} className="text-white" />
+        </motion.div>
+        
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
+          Mastering Data Engineering
+        </motion.h1>
+        
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-white/50 text-lg leading-relaxed mb-16"
+        >
+          A curated curriculum designed to transform learners into architects of information. 
+          Select a module from the sidebar to begin your journey.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="pt-12 border-t border-white/5 flex flex-col items-center w-full"
+        >
+          <p className="text-[10px] uppercase tracking-[0.5em] text-white/20 mb-4 font-bold">An Educational Platform By</p>
+          <h4 className="text-3xl text-white/35 font-serif italic tracking-wide" style={{ fontFamily: "'Instrument Serif', serif" }}>
+            Dhananjay Narula
+          </h4>
+          <div className="mt-8 flex gap-4">
+             <div className="px-4 py-2 rounded-full bg-white/5 border border-white/5 text-[10px] text-white/30 uppercase tracking-widest">Architect</div>
+             <div className="px-4 py-2 rounded-full bg-white/5 border border-white/5 text-[10px] text-white/30 uppercase tracking-widest">Educator</div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <AnimatePresence mode="wait">
@@ -394,6 +442,18 @@ export default function TopicContent({ activeTopic }: TopicContentProps) {
           ) : (
             <div />
           )}
+        </div>
+
+        {/* Footer Credit */}
+        <div className="mt-24 pt-12 border-t border-white/5 flex flex-col items-center text-center">
+          <div className="w-px h-12 bg-gradient-to-b from-white/10 to-transparent mb-8" />
+          <p className="text-[10px] uppercase tracking-[0.5em] text-white/20 mb-3 font-bold">Project Excellence By</p>
+          <h4 className="text-2xl text-white/40 font-serif italic tracking-wide" style={{ fontFamily: "'Instrument Serif', serif" }}>
+            Dhananjay Narula
+          </h4>
+          <p className="mt-4 text-[11px] text-white/15 max-w-xs leading-relaxed">
+            Designed to bridge the gap between complex data engineering concepts and exam-ready mastery.
+          </p>
         </div>
       </motion.div>
     </AnimatePresence>

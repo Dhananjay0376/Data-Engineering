@@ -46,7 +46,7 @@ export default function Sidebar({ activeTopic, setActiveTopic }: SidebarProps) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-72 bg-[#0d0d1a]/95 backdrop-blur-xl border-r border-white/5 z-40 transform transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed top-0 left-0 h-full w-72 bg-[#0d0d1a]/95 backdrop-blur-xl border-r border-white/5 z-40 transform transition-transform duration-300 flex flex-col lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -62,7 +62,7 @@ export default function Sidebar({ activeTopic, setActiveTopic }: SidebarProps) {
           </div>
         </div>
 
-        <nav className="p-4 overflow-y-auto h-[calc(100%-88px)] space-y-6">
+        <nav className="p-4 overflow-y-auto flex-1 space-y-6">
           {[1, 2].map((sessionNumber) => (
             <div key={sessionNumber} className="space-y-2">
               <div className="px-4 flex items-center gap-3">
@@ -124,6 +124,18 @@ export default function Sidebar({ activeTopic, setActiveTopic }: SidebarProps) {
             </div>
           ))}
         </nav>
+
+        <div className="p-6 border-t border-white/5 mt-auto">
+          <div className="flex items-center gap-3 group cursor-default">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center text-[10px] font-bold text-white/40 border border-white/10 group-hover:border-white/20 transition-colors">
+              DN
+            </div>
+            <div>
+              <p className="text-[10px] text-white/30 uppercase tracking-[0.2em] font-bold">Created By</p>
+              <p className="text-xs text-white/60 font-medium group-hover:text-white/80 transition-colors">Dhananjay Narula</p>
+            </div>
+          </div>
+        </div>
       </aside>
     </>
   );
