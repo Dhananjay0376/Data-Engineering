@@ -451,7 +451,7 @@ export const topics: Topic[] = [
       {
         title: 'The Art of Data Cleaning',
         content:
-          `In the world of data, raw information is rarely perfect. It’s often like water pulled straight from a river—it might look okay, but it’s full of invisible "impurities" like duplicates, missing values, and formatting errors. Data cleaning is the essential "filtration system." It is the process of finding and fixing (or removing) incorrect, corrupted, or irrelevant data from your dataset. Without this step, any analysis or AI model you build will suffer from "Garbage In, Garbage Out"—meaning your results will be just as messy and unreliable as the data you started with. In modern engineering, we don't just clean once; we build automated "cleaning stations" inside our pipelines to handle millions of records every second.`,
+          `In the world of data, raw information is rarely perfect. It’s often like water pulled straight from a river—it might look okay, but it’s full of invisible "impurities" like duplicates, missing values, and formatting errors. Data cleaning is the essential "filtration system." It is the process of finding and fixing surface issues (Structural Cleaning) and making sure all formats are consistent (Standardization). Without this step, any analysis or AI model you build will suffer from "Garbage In, Garbage Out"—meaning your results will be just as messy and unreliable as the data you started with (GIGO). In modern engineering, we don't just clean once; we build automated "cleaning stations" inside our pipelines to handle millions of records every second.`,
         keyPoints: [
           'Garbage In, Garbage Out (GIGO): If your data is low-quality, your insights will be wrong, no matter how smart your algorithms are.',
           'The Origin of "Dirt": Data gets messy because of human typos, sensor glitches, system crashes, or when merging data from different generations of software.',
@@ -462,7 +462,7 @@ export const topics: Topic[] = [
       {
         title: 'Dealing with the "Gaps": Missing Data',
         content:
-          'Missing data is one of the most common headaches in data engineering. Imagine you’re running a survey and 20% of people skip the "Age" question. What do you do? You have three main choices: 1. Deletion (throwing away those 20% of responses), 2. Imputation (using the average age of the other 80% to fill the gap), or 3. Flagging (marking them as "Unknown"). Each choice has a trade-off. Throwing data away makes your dataset smaller and potentially biased, while guessing (imputing) can accidentally create patterns that aren’t actually there. Choosing the right strategy depends on *why* the data is missing in the first place.',
+          `Missing data is one of the most common headaches in data engineering. Imagine you’re running a survey and 20% of people skip the "Age" question. What do you do? You have three main choices: 1. throwing away those 20% of responses (Deletion), 2. using the average age of the other 80% to fill the gap (Imputation), or 3. marking them as "Unknown" (Flagging). Each choice has a trade-off. Throwing data away makes your dataset smaller and potentially biased, while guessing (imputing) can accidentally create patterns that aren’t actually there. Choosing the right strategy depends on *why* the data is missing (MCAR vs MNAR) in the first place.`,
         keyPoints: [
           'Listwise Deletion: The "all or nothing" approach—if a record is missing even one key piece of info, you discard it.',
           'Mean/Median Imputation: Filling gaps with the average value—quick and easy, but it can make your data look more "average" than it really is.',
@@ -473,7 +473,7 @@ export const topics: Topic[] = [
       {
         title: 'Cleaning at Scale: Batch vs. Stream',
         content:
-          `The way you clean data depends on how fast it’s moving. Batch cleaning is like a massive "weekly deep clean" of your house—you have all the data at once, so you can easily spot duplicates across the entire history. Stream cleaning is like "cleaning as you go"—as every single event arrives, you have to decide instantly if it’s valid. Stream cleaning is much harder because you don’t have the "big picture" yet, but it’s necessary for things like real-time fraud detection where you can't wait for a weekly batch run to find a stolen credit card.`,
+          `The way you clean data depends on how fast it’s moving. Batch cleaning is like a massive "weekly deep clean" of your house where you can remove duplicates across the entire history (Global Deduplication). Stream cleaning is like "cleaning as you go"—as every single event arrives, you have to decide instantly if it’s valid. Stream cleaning is much harder because you don’t have the "big picture" yet, but it’s necessary for things like real-time fraud detection where you can't wait for a weekly batch run (Latency) to find a stolen credit card. To handle late data in streams, we use special timers (Watermarking).`,
         keyPoints: [
           'Global Deduplication: In batch mode, you can compare a new record against every record ever seen to find duplicates.',
           'Windowed Deduplication: In streaming, you only compare records within a short time window (e.g., the last 10 minutes) to save memory.',
@@ -493,7 +493,7 @@ export const topics: Topic[] = [
       {
         title: 'The "Tower of Babel" Problem',
         content:
-          'Data integration is the challenge of taking data from many different "languages" (systems) and combining them into a single, unified story. Imagine a company where the Sales team calls a customer "Client_ID" but the Support team calls them "User_Account." If you don’t integrate them, you have two different versions of the truth. Integration is about building a "bridge" between these systems so that everyone in the company is looking at the same data. This is how we create a "Single Source of Truth"—a place where you can find the definitive answer to any business question.',
+          `Data integration is the challenge of taking data from many different "languages" (systems) and combining them into a single, unified story. Imagine a company where the Sales team calls a customer "Client_ID" but the Support team calls them "User_Account"—aligning these names is called Schema Mapping. If you don’t integrate them, you have two different versions of the truth. We also have to figure out if "John Smith" in one system is the same "J. Smith" in another (Entity Resolution). Integration is about building a "bridge" between these systems to create a "Single Source of Truth" where everyone sees the same definitive data.`,
         keyPoints: [
           'Schema Mapping: Determining that `first_name` in System A is exactly the same as `fname` in System B.',
           'Entity Resolution: The difficult task of figuring out if "John Smith" at 123 Main St is the same person as "J. Smith" at the same address.',
@@ -504,7 +504,7 @@ export const topics: Topic[] = [
       {
         title: 'From Scripts to Platforms',
         content:
-          'In the past, data engineers had to write thousands of lines of custom code (scripts) just to move data from one place to another. Every time an API changed, the script would break. Today, we use "Modern Data Integration" platforms that provide pre-built "connectors." These are like universal adapters that can plug into hundreds of different services (like Shopify, Salesforce, or Google Ads) and pull data automatically. This allows engineers to spend less time "fixing broken pipes" and more time building value.',
+          `In the past, data engineers had to write thousands of lines of custom code (scripts) just to move data. Today, we use modern platforms that provide pre-built "connectors" (Managed Connectors) that act like universal adapters for services like Shopify or Salesforce. Some systems even watch a database's logs to sync changes instantly (Change Data Capture or CDC). Once the data is cleaned in our warehouse, we sometimes send it *back* to the sales tools so the team can use it (Reverse ETL). This allows engineers to spend less time "fixing broken pipes" and more time building value.`,
         keyPoints: [
           'Managed Connectors: Tools like Fivetran or Airbyte that handle the messy details of APIs and error handling for you.',
           'Reverse ETL: The practice of taking your cleaned, integrated data and sending it *back* to tools like Salesforce so the Sales team can use it.',
@@ -524,7 +524,7 @@ export const topics: Topic[] = [
       {
         title: 'The Ingredients of Trust',
         content:
-          'Data quality isn’t just a "nice-to-have"—it’s the foundation of every decision a company makes. Think of data as the ingredients for a meal. If you use rotten vegetables (bad data), even the world’s best chef (a great AI model) will produce a terrible meal. Data quality is about measuring how "fresh" and "clean" your data is. When data quality is high, people trust the numbers they see on their dashboards. When it’s low, people stop using data and go back to making decisions based on "gut feeling," which is dangerous for any business.',
+          `Data quality isn’t just a "nice-to-have"—it’s the foundation of trust. Think of data as ingredients: if you use rotten vegetables, even the world’s best chef will produce a terrible meal. We measure quality through several lenses: Is the data true to reality (Accuracy)? Are there any missing pieces (Completeness)? Does it follow the rules (Validity)? And is it fresh enough to be useful (Timeliness)? To stay ahead of problems, we use "Data Observability" tools that act like a heart monitor for your data, alerting you before a "system failure" occurs.`,
         keyPoints: [
           'Accuracy: Does the data reflect reality? (e.g., Does the database say I have 10 items in stock when I actually have 0?)',
           'Completeness: Are there any missing pieces? (e.g., Does every customer record have an email address?)',
@@ -536,7 +536,7 @@ export const topics: Topic[] = [
       {
         title: 'The Consistency Challenge',
         content:
-          'Consistency is about making sure that the same story is told everywhere. Imagine if your bank’s mobile app says you have $500, but the ATM says you have $200. That’s a consistency failure. In big companies, data is copied across many different systems. Ensuring that every copy stays synchronized is one of the hardest jobs for a data engineer. We use techniques like "Master Data Management" to create a single "Gold Record" for every customer or product that every other system must follow.',
+          `Consistency is about making sure that the same story is told everywhere. Imagine if your bank’s mobile app says you have $500, but the ATM says you have $200—that’s a consistency failure. To fix this, we use Master Data Management (MDM) to create a single "Gold Record" that acts as the referee when systems disagree. We also ensure that if a system runs the same update twice, it doesn't create a mess like charging you twice (Idempotency). Ensuring that every copy of data across a global company stays synchronized is one of the hardest but most vital jobs in engineering.`,
         keyPoints: [
           'Master Data: The "Single Source of Truth" that acts as the referee when two systems disagree.',
           'Distributed Transactions: A way of saying "either update the data in *all* systems at once, or don’t update it at all."',
@@ -556,7 +556,7 @@ export const topics: Topic[] = [
       {
         title: 'Building the Data Highway',
         content:
-          'A data pipeline is like a massive highway system for information. It’s not just a single road; it’s a network of exits, on-ramps, and processing centers. A pipeline’s job is to take raw data from where it’s born (like a user click or a sensor reading) and transport it safely to where it’s needed (like a dashboard or an AI model). Along the way, the data is cleaned, sorted, and aggregated. A well-designed pipeline is "fault-tolerant," meaning if one "road" is blocked, the data finds another way to reach its destination without being lost.',
+          `A data pipeline is a massive highway system for information. We often organize these highways using the Medallion Architecture, which sorts data into three rooms: the "Messy Drawer" (Bronze/Raw), the "Organized Shelf" (Silver/Cleaned), and the "Dinner Table" (Gold/Aggregated). A pipeline’s job is to transport data safely from where it’s born to where it’s needed. Along the way, it must be "fault-tolerant," meaning if one road is blocked, the data finds another way. We also watch for "Data Drift"—when the incoming data suddenly changes shape or meaning—to prevent silent failures.`,
         keyPoints: [
           'The Medallion Architecture: A popular way to organize pipelines into three stages: Bronze, Silver, and Gold.',
           'Bronze (Raw): Think of this as the "Messy Drawer"—everything is kept exactly as it arrived, just in case you need to re-process it later.',
@@ -567,7 +567,7 @@ export const topics: Topic[] = [
       {
         title: 'The Conductor: Apache Airflow',
         content:
-          `In a complex factory, you need a manager to make sure everyone is doing their job in the right order. In data engineering, that manager is called an "Orchestrator," and Apache Airflow is the most famous one. Airflow doesn't actually move the data itself; instead, it acts like a conductor in an orchestra. It knows that Task B can’t start until Task A is finished. If Task A fails, Airflow knows to try again three times before calling for help. It keeps everything running on time, even when there are thousands of moving parts.`,
+          `In a complex factory, you need a manager (Orchestrator) to make sure tasks happen in the right order. Apache Airflow is the most famous manager; it uses a visual flowchart called a DAG (Directed Acyclic Graph) to map out dependencies. Airflow doesn't move data itself; it acts like a conductor. It knows that "Task B" can’t start until "Task A" finishes. If a task fails, it can automatically try again (Retries) or even go back in time to fix old data (Backfilling). It keeps the entire orchestra in sync, even with thousands of moving parts.`,
         keyPoints: [
           'DAG (Directed Acyclic Graph): A fancy name for a "Flowchart" that shows the order and dependencies of your tasks.',
           'Operators: Pre-built tools that tell Airflow how to talk to a database, run a Python script, or send a message to Slack.',
@@ -598,7 +598,7 @@ export const topics: Topic[] = [
       {
         title: 'The "Castle" Defense Strategy',
         content:
-          'Data security is like protecting a king’s castle. You don’t just have one big wall; you have "Defense in Depth." You have a moat (Firewalls) to keep the public out, a drawbridge (IAM) that only opens for people with the right key, and a vault (Encryption) deep inside where the most valuable jewels (data) are kept. The goal is to make it so hard for a thief to get through all the layers that they give up before they ever reach the data. Even if one layer (like a password) is stolen, the other layers (like two-factor authentication and encryption) still keep the data safe.',
+          `Data security is like protecting a king’s castle using "Defense in Depth." You have a moat (Firewalls) to keep the public out, a security guard checking IDs (IAM), and a rulebook that only gives people the keys they actually need (Role-Based Access Control or RBAC). We even build the castle on a private island not connected to the public internet (VPC). The goal is to make it so hard for a thief to get through all these layers that they give up. Even if one layer fails, the others (like multi-factor authentication) keep the "jewels" (your data) safe.`,
         keyPoints: [
           'IAM (Identity & Access Management): The "Security Guard" at the gate who checks your ID before letting you in.',
           'RBAC (Role-Based Access Control): Giving people only the keys they need. A "Cook" doesn’t need a key to the "Armory," just like a "Marketing Analyst" doesn’t need access to "Payroll Data."',
@@ -609,7 +609,7 @@ export const topics: Topic[] = [
       {
         title: 'The Secret Decoder Ring: Encryption',
         content:
-          'Encryption is the process of turning your data into a secret code that looks like gibberish to anyone who doesn’t have the "Secret Decoder Ring" (the Key). We use two types of encryption. "In Transit" encryption is like sending a letter in a locked armored truck—even if someone hijacks the truck, they can’t read the letter. "At Rest" encryption is like putting that letter into a high-security safe once it reaches its destination. As data engineers, we ensure that data is encrypted every step of the way.',
+          `Encryption turns your data into a secret code that only a "Secret Decoder Ring" (the Key) can read. We encrypt data while it travels in the armored truck (In Transit) and while it’s locked in the safe at home (At Rest). For passwords, we use a "one-way" code (Hashing) so that even if the database is stolen, the actual passwords remain hidden. The most important rule is to never lose or leak your keys, which is why we use automated services to manage and rotate them (Key Management).`,
         keyPoints: [
           'TLS/SSL: The technology that puts the "Padlock" icon in your browser—it encrypts data as it travels across the web.',
           'AES-256: The world’s strongest digital safe—it’s the standard used to protect data sitting on physical hard drives.',
@@ -620,7 +620,7 @@ export const topics: Topic[] = [
       {
         title: 'Human Rights for Data: Privacy',
         content:
-          'Data Privacy is about more than just security; it’s about respecting the "Human Rights" of the people behind the data. Laws like GDPR and CCPA give users control over their own information. For example, a user has the "Right to be Forgotten," which means if they ask you to delete their data, you must be able to find every single copy of it in your massive data lake and wipe it out. Privacy is about building trust with your users by proving that you are a responsible "guardian" of their information.',
+          `Data Privacy is about respecting the "Human Rights" of the people behind the data. This involves identifying personal info like emails or home addresses (PII) and hiding them from people who don't need to see them (Data Masking). Laws like GDPR give users the "Right to be Forgotten," meaning you must be able to wipe out every copy of their data if they ask. Privacy is about building trust by proving you are a responsible "guardian" of information, ensuring data stays where it's legally allowed to be (Data Residency).`,
         keyPoints: [
           'PII (Personally Identifiable Information): Any data that can be used to identify a specific person, like an email, home address, or social security number.',
           'Data Masking: Hiding sensitive info (like showing only the last 4 digits of a credit card) so that analysts can do their jobs without seeing private data.',
