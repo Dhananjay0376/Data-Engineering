@@ -449,36 +449,36 @@ export const topics: Topic[] = [
     session: 2,
     sections: [
       {
-        title: 'Core Cleaning Principles',
+        title: 'The Art of Data Cleaning',
         content:
-          'Data cleaning is not a one-time task but a continuous discipline in the data engineering lifecycle. It involves the systematic detection and correction (or removal) of corrupt or inaccurate records from a record set, table, or database. This refers to identifying incomplete, incorrect, inaccurate or irrelevant parts of the data and then replacing, modifying, or deleting the coarse data. In a production environment, cleaning must be automated within pipelines to handle millions of records per minute, ensuring that downstream systems like ML models and BI dashboards receive normalized and trustworthy data.',
+          `In the world of data, raw information is rarely perfect. It’s often like water pulled straight from a river—it might look okay, but it’s full of invisible "impurities" like duplicates, missing values, and formatting errors. Data cleaning is the essential "filtration system." It is the process of finding and fixing (or removing) incorrect, corrupted, or irrelevant data from your dataset. Without this step, any analysis or AI model you build will suffer from "Garbage In, Garbage Out"—meaning your results will be just as messy and unreliable as the data you started with. In modern engineering, we don't just clean once; we build automated "cleaning stations" inside our pipelines to handle millions of records every second.`,
         keyPoints: [
-          'Garbage In, Garbage Out (GIGO): The accuracy of analytical results is capped by the quality of the input data.',
-          'Data Profiling: The essential first step — systematically analyzing data to understand its distribution, null rates, and anomalies.',
-          'Structural Errors: Fixing naming conventions, handling typos, and resolving inconsistent capitalization (e.g., "NY" vs "New York").',
-          'Standardization: Ensuring all units of measure, currencies, and date formats (ISO 8601) are consistent across the dataset.',
+          'Garbage In, Garbage Out (GIGO): If your data is low-quality, your insights will be wrong, no matter how smart your algorithms are.',
+          'The Origin of "Dirt": Data gets messy because of human typos, sensor glitches, system crashes, or when merging data from different generations of software.',
+          'Structural Cleaning: This involves fixing "surface" issues like inconsistent capitalization (e.g., "NY" vs "New York") or removing invisible trailing spaces that break database searches.',
+          'Standardization: Making sure everyone "speaks the same language"—for example, converting all dates to a single format (like ISO 8601) and all currencies to a single base.',
         ],
       },
       {
-        title: 'Handling Missing & Incomplete Data',
+        title: 'Dealing with the "Gaps": Missing Data',
         content:
-          'Missing data is an inevitability in real-world systems, caused by everything from sensor failure to user skipping a form field. Data engineers must decide on a strategy for each field: Deletion (removing the row), Imputation (filling with a mean, median, or predicted value), or Flagging (using a placeholder like -1 or "Unknown"). Each choice has trade-offs — deletion can introduce bias, while imputation can distort statistical distributions. Advanced pipelines use ML-driven imputation to fill gaps based on surrounding context.',
+          'Missing data is one of the most common headaches in data engineering. Imagine you’re running a survey and 20% of people skip the "Age" question. What do you do? You have three main choices: 1. Deletion (throwing away those 20% of responses), 2. Imputation (using the average age of the other 80% to fill the gap), or 3. Flagging (marking them as "Unknown"). Each choice has a trade-off. Throwing data away makes your dataset smaller and potentially biased, while guessing (imputing) can accidentally create patterns that aren’t actually there. Choosing the right strategy depends on *why* the data is missing in the first place.',
         keyPoints: [
-          'Listwise Deletion: Removing an entire record if any required field is missing — simple but reduces sample size.',
-          'Mean/Median Imputation: Filling numerical gaps with central values — fast but reduces variance.',
-          'K-Nearest Neighbors (KNN): Predicting missing values based on similar records in the dataset.',
-          'Multiple Imputation: Using statistical models to create several plausible datasets and averaging the results.',
+          'Listwise Deletion: The "all or nothing" approach—if a record is missing even one key piece of info, you discard it.',
+          'Mean/Median Imputation: Filling gaps with the average value—quick and easy, but it can make your data look more "average" than it really is.',
+          'Predictive Imputation: Using AI to guess the missing value based on other things we know about that record (like guessing age based on job title).',
+          'MCAR vs MNAR: Understanding if data is missing "at random" or for a specific reason (e.g., wealthy people being less likely to report their income).',
         ],
       },
       {
-        title: 'Batch vs. Stream Processing (Advanced Comparison)',
+        title: 'Cleaning at Scale: Batch vs. Stream',
         content:
-          'Choosing between batch and stream processing is a fundamental architectural decision that impacts how cleaning is implemented. Batch processing (e.g., via Spark) handles large volumes of historical data, allowing for complex "global" cleaning tasks like cross-table deduplication. Stream processing (e.g., via Flink or Kafka Streams) handles data minute-by-minute, enabling real-time cleaning but requiring state management to handle out-of-order events or session-based cleaning. Modern architectures often leverage both to balance low-latency insights with high-accuracy historical records.',
+          `The way you clean data depends on how fast it’s moving. Batch cleaning is like a massive "weekly deep clean" of your house—you have all the data at once, so you can easily spot duplicates across the entire history. Stream cleaning is like "cleaning as you go"—as every single event arrives, you have to decide instantly if it’s valid. Stream cleaning is much harder because you don’t have the "big picture" yet, but it’s necessary for things like real-time fraud detection where you can't wait for a weekly batch run to find a stolen credit card.`,
         keyPoints: [
-          'State Management: Essential for streaming — keeping track of seen events to detect duplicates in real-time.',
-          'Watermarking: A streaming technique to handle data that arrives late, ensuring cleaning logic waits long enough for late records.',
-          'Cost Efficiency: Batch is typically cheaper per gigabyte; Streaming costs more in compute but provides higher business value in real-time.',
-          'Unified Processing: Using frameworks like Apache Beam to write cleaning code once and run it in both batch and stream modes.',
+          'Global Deduplication: In batch mode, you can compare a new record against every record ever seen to find duplicates.',
+          'Windowed Deduplication: In streaming, you only compare records within a short time window (e.g., the last 10 minutes) to save memory.',
+          'Watermarking: A technique that tells the cleaner how long to wait for "late-arriving" data before finishing the job.',
+          'Stateless vs Stateful: Simple cleaning (like fixing a typo) is "stateless," but complex cleaning (like checking if a user has already sent this message) requires "state" or memory.',
         ],
       },
     ],
@@ -491,25 +491,25 @@ export const topics: Topic[] = [
     session: 2,
     sections: [
       {
-        title: 'Combining Data from Multiple Sources',
+        title: 'The "Tower of Babel" Problem',
         content:
-          'Data integration is the process of combining data residing in different sources and providing users with a unified view of them. This process becomes significant in a variety of situations, including both commercial (when two similar companies need to merge their databases) and scientific (combining research results from different repositories) domains. Engineers must navigate the "Schema Matching" problem — determining that `cust_id` in system A is the same as `User_Account_Number` in system B — to create a cohesive Single Source of Truth.',
+          'Data integration is the challenge of taking data from many different "languages" (systems) and combining them into a single, unified story. Imagine a company where the Sales team calls a customer "Client_ID" but the Support team calls them "User_Account." If you don’t integrate them, you have two different versions of the truth. Integration is about building a "bridge" between these systems so that everyone in the company is looking at the same data. This is how we create a "Single Source of Truth"—a place where you can find the definitive answer to any business question.',
         keyPoints: [
-          'Schema Mapping: Creating the translation layer between source fields and a unified target schema.',
-          'Entity Resolution: Using fuzzy matching and deterministic rules to identify the same individual across multiple systems.',
-          'Data Fusion: Resolving conflicts when two sources provide different values for the same attribute (e.g., which address is more fresh?).',
-          'Virtual Integration (Federation): Accessing data in real-time from sources without physically moving it to a central lake.',
+          'Schema Mapping: Determining that `first_name` in System A is exactly the same as `fname` in System B.',
+          'Entity Resolution: The difficult task of figuring out if "John Smith" at 123 Main St is the same person as "J. Smith" at the same address.',
+          'Data Fusion: Deciding which system to trust when they disagree (e.g., if one says the customer moved and the other says they didn’t).',
+          'Virtual Integration: Connecting to sources in real-time without actually moving the data—like a "live window" into another database.',
         ],
       },
       {
-        title: 'Modern Data Integration Tools',
+        title: 'From Scripts to Platforms',
         content:
-          'The integration landscape has evolved from custom-coded scripts to sophisticated SaaS platforms. Low-code ingestion tools like Fivetran and Airbyte offer managed connectors that handle the heavy lifting of API paging and error handling. For complex, high-scale transformations, dbt (Data Build Tool) has become the industry standard, allowing engineers to define integration logic using SQL while maintaining version control and testing. Choosing the right tool depends on data volume, team expertise, and the required frequency of updates.',
+          'In the past, data engineers had to write thousands of lines of custom code (scripts) just to move data from one place to another. Every time an API changed, the script would break. Today, we use "Modern Data Integration" platforms that provide pre-built "connectors." These are like universal adapters that can plug into hundreds of different services (like Shopify, Salesforce, or Google Ads) and pull data automatically. This allows engineers to spend less time "fixing broken pipes" and more time building value.',
         keyPoints: [
-          'Managed Connectors: Automatically adapt to changes in upstream APIs (e.g., Salesforce or Stripe updates).',
-          'Open-Source (Airbyte/Meltano): Provides flexibility to build custom integrations while leveraging community connectors.',
-          'Reverse ETL (Census/Hightouch): The emerging practice of moving integrated data from the warehouse back into operational tools.',
-          'Change Data Capture (CDC): Using transaction logs (PostgreSQL binlog) to capture changes in real-time for integration.',
+          'Managed Connectors: Tools like Fivetran or Airbyte that handle the messy details of APIs and error handling for you.',
+          'Reverse ETL: The practice of taking your cleaned, integrated data and sending it *back* to tools like Salesforce so the Sales team can use it.',
+          'CDC (Change Data Capture): Watching a database’s "diary" (transaction logs) to see exactly when data changes and instantly syncing it.',
+          'API Polling vs Webhooks: The difference between "calling to check for updates" every hour versus "waiting for the system to call you" when something happens.',
         ],
       },
     ],
@@ -522,25 +522,26 @@ export const topics: Topic[] = [
     session: 2,
     sections: [
       {
-        title: 'Defining Data Quality Standards',
+        title: 'The Ingredients of Trust',
         content:
-          'Data quality is not a subjective "feeling" but a measurable set of metrics. To maintain high-quality data, engineers implement automated checks against five key dimensions: Accuracy (correctness), Completeness (no missing gaps), Consistency (matches across systems), Validity (follows business rules), and Timeliness (data is fresh enough). High-quality data is the lifeblood of an organization; without it, trust in analytics collapses, leading to costly business errors.',
+          'Data quality isn’t just a "nice-to-have"—it’s the foundation of every decision a company makes. Think of data as the ingredients for a meal. If you use rotten vegetables (bad data), even the world’s best chef (a great AI model) will produce a terrible meal. Data quality is about measuring how "fresh" and "clean" your data is. When data quality is high, people trust the numbers they see on their dashboards. When it’s low, people stop using data and go back to making decisions based on "gut feeling," which is dangerous for any business.',
         keyPoints: [
-          'The 5 Dimensions: Accuracy, Completeness, Consistency, Validity, and Timeliness.',
-          'Data SLAs: Formal Service Level Agreements defining the minimum quality standards for a dataset.',
-          'Automated Assertions: Running tests inside the pipeline to immediately catch and quarantine "bad" data.',
-          'Data Observability: Using tools like Monte Carlo or Great Expectations to monitor quality trends over time.',
+          'Accuracy: Does the data reflect reality? (e.g., Does the database say I have 10 items in stock when I actually have 0?)',
+          'Completeness: Are there any missing pieces? (e.g., Does every customer record have an email address?)',
+          'Validity: Does the data follow the rules? (e.g., Is the "Phone Number" column actually full of numbers, or are there names in there?)',
+          'Timeliness: Is the data fresh enough to be useful? (e.g., A report on yesterday’s sales is useful; a report on sales from 3 years ago might not be.)',
+          'Data Observability: Not just checking for errors, but watching your data like a heart monitor to spot problems before they cause a "cardiac arrest" in your systems.',
         ],
       },
       {
-        title: 'Ensuring Data Consistency',
+        title: 'The Consistency Challenge',
         content:
-          'Consistency ensures that the same piece of information, when stored in multiple places, is identical. In distributed data architectures, consistency is difficult to maintain due to the CAP theorem (Consistency vs. Availability). Data engineers use techniques like Distributed Transactions or Idempotent Pipelines to ensure that data remains consistent even during system failures. Maintaining a shared "Master Data" repository helps synchronize core entities across all business units.',
+          'Consistency is about making sure that the same story is told everywhere. Imagine if your bank’s mobile app says you have $500, but the ATM says you have $200. That’s a consistency failure. In big companies, data is copied across many different systems. Ensuring that every copy stays synchronized is one of the hardest jobs for a data engineer. We use techniques like "Master Data Management" to create a single "Gold Record" for every customer or product that every other system must follow.',
         keyPoints: [
-          'Idempotency: Ensuring that if a pipeline task runs twice, it produces the same consistent output.',
-          'Distributed Locks: Preventing multiple processes from modifying the same record simultaneously.',
-          'Reconciliation Pipelines: Periodic jobs that "crawl" different systems to find and fix inconsistencies.',
-          'Referential Integrity: Ensuring that relationships between tables (e.g., Orders to Customers) are never broken.',
+          'Master Data: The "Single Source of Truth" that acts as the referee when two systems disagree.',
+          'Distributed Transactions: A way of saying "either update the data in *all* systems at once, or don’t update it at all."',
+          'Idempotency: The property of a system where running the same update twice doesn’t create a mess (like accidentally charging a customer twice).',
+          'Reconciliation: A regular "check-up" where you compare two systems to find and fix any differences between them.',
         ],
       },
     ],
@@ -553,36 +554,36 @@ export const topics: Topic[] = [
     session: 2,
     sections: [
       {
-        title: 'Designing and Implementing Data Pipelines',
+        title: 'Building the Data Highway',
         content:
-          'A data pipeline is a set of data processing elements connected in series, where the output of one element is the input of the next. Designing a production-ready pipeline requires more than just moving data; it requires build-in fault tolerance, scalability, and modularity. Engineers use the MEDALLION architecture (Bronze, Silver, Gold layers) to organize data as it moves from raw ingestion to analytics-ready tables, ensuring that logic is separated and easy to maintain.',
+          'A data pipeline is like a massive highway system for information. It’s not just a single road; it’s a network of exits, on-ramps, and processing centers. A pipeline’s job is to take raw data from where it’s born (like a user click or a sensor reading) and transport it safely to where it’s needed (like a dashboard or an AI model). Along the way, the data is cleaned, sorted, and aggregated. A well-designed pipeline is "fault-tolerant," meaning if one "road" is blocked, the data finds another way to reach its destination without being lost.',
         keyPoints: [
-          'Medallion Architecture: Bronze (Raw), Silver (Filtered/Cleaned), and Gold (Aggregated/Business-ready).',
-          'Modularity: Breaking pipelines into small, independent "Micro-services" that are easy to test and replace.',
-          'Fault Tolerance: Building pipelines that can recover from network partitions or database outages without data loss.',
-          'Scalability: Using distributed frameworks (Spark/Flink) to handle a 10x increase in data without code changes.',
+          'The Medallion Architecture: A popular way to organize pipelines into three stages: Bronze, Silver, and Gold.',
+          'Bronze (Raw): Think of this as the "Messy Drawer"—everything is kept exactly as it arrived, just in case you need to re-process it later.',
+          'Silver (Cleaned): This is the "Organized Shelf"—the data has been cleaned, filtered, and joined with other sources so it’s easy to use.',
+          'Gold (Aggregated): This is the "Dinner Table"—the data is summarized and perfectly formatted for a specific business report or dashboard.',
         ],
       },
       {
-        title: 'Workflow Orchestration with Apache Airflow',
+        title: 'The Conductor: Apache Airflow',
         content:
-          'Workflow orchestration is the "Conductor" of the data warehouse. Apache Airflow allows engineers to define complex, dependency-aware workflows as Directed Acyclic Graphs (DAGs) in Python. It handles the scheduling, triggers retries on failure, and provide a rich UI to monitor the health of every task. Airflow prevents the "Spaghetti Code" of cron jobs by centralizing all logic into a single, version-controlled platform.',
+          `In a complex factory, you need a manager to make sure everyone is doing their job in the right order. In data engineering, that manager is called an "Orchestrator," and Apache Airflow is the most famous one. Airflow doesn't actually move the data itself; instead, it acts like a conductor in an orchestra. It knows that Task B can’t start until Task A is finished. If Task A fails, Airflow knows to try again three times before calling for help. It keeps everything running on time, even when there are thousands of moving parts.`,
         keyPoints: [
-          'DAGs (Directed Acyclic Graphs): Visual representation of the order and dependencies of your data tasks.',
-          'Operators: Pre-built templates for running SQL, Python, or calling external APIs (e.g., Slack notifications).',
-          'Dynamic Task Generation: Writing code that automatically creates tasks based on the number of files in a folder.',
-          'Backfilling: The ability to easily re-run months of historical data after a logic change or bug fix.',
+          'DAG (Directed Acyclic Graph): A fancy name for a "Flowchart" that shows the order and dependencies of your tasks.',
+          'Operators: Pre-built tools that tell Airflow how to talk to a database, run a Python script, or send a message to Slack.',
+          'Backfilling: The ability to say "I fixed a bug in my code, now go back and re-run every day from the last six months to fix the old data."',
+          'SLA (Service Level Agreement): A promise that "this data will be ready by 8 AM every morning"—Airflow alerts you if it’s running late.',
         ],
       },
       {
-        title: 'Monitoring and Maintenance',
+        title: 'Staying Healthy: Monitoring',
         content:
-          'A pipeline is never "finished." Monitoring is essential to catch silent failures, such as a pipeline that runs successfully but produces zero rows. Observability involves tracking "Data Drift" (when input patterns change unexpectedly) and "Metric Drift." Maintenance includes regular performance tuning, updating API versions, and refactoring code as business requirements evolve. Successful data teams prioritize "Data Ops" — applying DevOps principles like CI/CD to data pipelines.',
+          'A pipeline is never "done." It’s a living thing that needs constant check-ups. Monitoring is how we know if the highway is still open or if there’s a "traffic jam." We look for things like "Data Drift"—where the incoming data suddenly changes shape (e.g., a source system starts sending prices in Cents instead of Dollars). Without good monitoring, a pipeline can fail silently, and you might not realize your company’s reports have been wrong for two weeks until it’s too late.',
         keyPoints: [
-          'Alerting: Immediate notifications (Slack/PagerDuty) when a critical task fails or an SLA is missed.',
-          'Data Freshness: A dashboard showing how old the data is in each analytics table.',
-          'Resource Monitoring: Tracking memory and CPU usage of Spark jobs to optimize cloud costs.',
-          'Schema Drift: Automatically detecting when a source system adds a new column or changes a data type.',
+          'Data Freshness: A simple check to see when the data was last updated. If it’s more than 24 hours old, something is wrong.',
+          'Volume Alerts: If a pipeline usually processes 1 million rows but suddenly processes only 10, it’s a sign of a "leak" or a "blockage" somewhere upstream.',
+          'Schema Drift: When the source system adds or deletes a column without telling you—your pipeline needs to be "flexible" enough to not break.',
+          'Lineage: A "family tree" for data that shows exactly where a number on a dashboard came from and every transformation it went through.',
         ],
       },
     ],
@@ -595,36 +596,36 @@ export const topics: Topic[] = [
     session: 2,
     sections: [
       {
-        title: 'Ensuring Data Security',
+        title: 'The "Castle" Defense Strategy',
         content:
-          'Data security is the protective measures taken to keep data safe from unauthorized access and to preserve its integrity and confidentiality. Data engineers implement security at three levels: Storage (encryption and VPCs), Compute (IAM roles and secrets management), and Access (RBAC and Row-Level Security). The goal is to ensure that even if one layer is breached, the data remains protected by multiple defensive rings.',
+          'Data security is like protecting a king’s castle. You don’t just have one big wall; you have "Defense in Depth." You have a moat (Firewalls) to keep the public out, a drawbridge (IAM) that only opens for people with the right key, and a vault (Encryption) deep inside where the most valuable jewels (data) are kept. The goal is to make it so hard for a thief to get through all the layers that they give up before they ever reach the data. Even if one layer (like a password) is stolen, the other layers (like two-factor authentication and encryption) still keep the data safe.',
         keyPoints: [
-          'VPC & Firewalls: Ensuring data infrastructure is isolated from the public internet.',
-          'IAM (Identity and Access Management): Managing granular permissions for every user and service account.',
-          'RBAC (Role-Based Access Control): Granting permissions based on job function rather than individual users.',
-          'Row-Level Security (RLS): Ensuring a user from "Region A" can only query data belonging to their region.',
+          'IAM (Identity & Access Management): The "Security Guard" at the gate who checks your ID before letting you in.',
+          'RBAC (Role-Based Access Control): Giving people only the keys they need. A "Cook" doesn’t need a key to the "Armory," just like a "Marketing Analyst" doesn’t need access to "Payroll Data."',
+          'VPC (Virtual Private Cloud): Building your castle on a private island that isn’t connected to the public internet.',
+          'Row-Level Security: Even if you’re allowed into the "Library," you can only read the books on the shelf that belong to your department.',
         ],
       },
       {
-        title: 'Data Encryption Techniques',
+        title: 'The Secret Decoder Ring: Encryption',
         content:
-          'Encryption is the process of translating plain text data into something that appears to be random and meaningless (ciphertext). Accessing the data requires a secret key. Data engineers manage encryption "In Transit" using TLS/SSL and "At Rest" using AES-256. They also leverage Key Management Services (KMS) to automatically rotate keys and ensure that no single person has access to the raw encryption secrets.',
+          'Encryption is the process of turning your data into a secret code that looks like gibberish to anyone who doesn’t have the "Secret Decoder Ring" (the Key). We use two types of encryption. "In Transit" encryption is like sending a letter in a locked armored truck—even if someone hijacks the truck, they can’t read the letter. "At Rest" encryption is like putting that letter into a high-security safe once it reaches its destination. As data engineers, we ensure that data is encrypted every step of the way.',
         keyPoints: [
-          'TLS/SSL: Encrypting data as it travels across the network between systems.',
-          'AES-256: The industry standard for encrypting data at rest (on physical hard drives).',
-          'Hashing: One-way encryption for protecting passwords and verifying data integrity.',
-          'Key Rotation: The security practice of regularly changing encryption keys to limit the impact of a potential compromise.',
+          'TLS/SSL: The technology that puts the "Padlock" icon in your browser—it encrypts data as it travels across the web.',
+          'AES-256: The world’s strongest digital safe—it’s the standard used to protect data sitting on physical hard drives.',
+          'Hashing: A "one-way" secret code. We use this to store passwords so that even if a database is stolen, the hackers can’t see the actual passwords.',
+          'Key Management: The most important rule of encryption is "don’t lose the keys." We use automated services to rotate and protect these keys.',
         ],
       },
       {
-        title: 'Compliance with Data Privacy Regulations',
+        title: 'Human Rights for Data: Privacy',
         content:
-          'Privacy regulations like GDPR, CCPA, and HIPAA are no longer optional. Data engineers must build "Compliance-by-Design" into their pipelines. This includes implementing data lineage (knowing where data came from), privacy-safe deletion (The Right to be Forgotten), and personal data discovery (identifying PII like emails or SSNs). Failure to comply can lead to fines totaling 4% of global revenue and permanent brand damage.',
+          'Data Privacy is about more than just security; it’s about respecting the "Human Rights" of the people behind the data. Laws like GDPR and CCPA give users control over their own information. For example, a user has the "Right to be Forgotten," which means if they ask you to delete their data, you must be able to find every single copy of it in your massive data lake and wipe it out. Privacy is about building trust with your users by proving that you are a responsible "guardian" of their information.',
         keyPoints: [
-          'GDPR & CCPA: Regulations giving users control over their data and requiring transparent usage policies.',
-          'PII Masking: Automatically hiding sensitive data from non-privileged users in the data warehouse.',
-          'Data Residency: Ensuring data for specific users stays physically within their geographic borders (e.g., EU data stays in the EU).',
-          'Data Lineage: Maintain an audit trail showing exactly how data was transformed from source to dashboard.',
+          'PII (Personally Identifiable Information): Any data that can be used to identify a specific person, like an email, home address, or social security number.',
+          'Data Masking: Hiding sensitive info (like showing only the last 4 digits of a credit card) so that analysts can do their jobs without seeing private data.',
+          'Data Residency: Some laws require that a citizen’s data must stay physically inside their country (e.g., German data must stay in Germany).',
+          'Consent Management: Ensuring you only collect data that the user has explicitly given you permission to use.',
         ],
       },
     ],
